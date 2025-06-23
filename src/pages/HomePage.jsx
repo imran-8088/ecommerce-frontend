@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsRequest } from '../features/products/productSlice';
 import { addToCart } from '../features/cart/cartSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Star } from 'lucide-react';
 import Navbar from './navbar';
