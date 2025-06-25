@@ -64,45 +64,47 @@ const ProductDetailPage = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-10">
-        <div className="flex-1">
+      
+      <div className="max-w-7xl mx-auto p-6 md:p-10 flex flex-col md:flex-row gap-12 animate-fadeIn">
+        <div className="flex-1 flex justify-center">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full max-w-md mx-auto h-auto rounded-lg shadow-lg object-contain"
+            className="w-full max-w-md h-auto rounded-2xl shadow-xl object-contain bg-white p-4"
           />
         </div>
 
         <div className="flex-1 space-y-6">
-          <h1 className="text-3xl font-extrabold text-gray-900">{product.name}</h1>
+          <h1 className="text-4xl font-bold text-gray-900">{product.name}</h1>
 
-          <p className="text-sm text-gray-500">
-            Category: {product.category?.name || 'Uncategorized'}
+          <p className="text-sm text-gray-600">
+            <span className="font-semibold">Category:</span>{' '}
+            {product.category?.name || 'Uncategorized'}
           </p>
 
-          <div className="flex items-center space-x-4 text-lg">
+          <div className="flex items-center space-x-4 text-xl font-medium">
             {product.discountedPrice && (
-              <span className="text-gray-500 line-through">
-                ₹{product.price}
-              </span>
+              <span className="text-gray-400 line-through">₹{product.price}</span>
             )}
-            <span className="text-green-600 font-semibold">
+            <span className="text-green-600 font-bold text-2xl">
               ₹{product.discountedPrice || product.price}
             </span>
           </div>
 
-          <p className="text-gray-700 text-sm">{product.description || 'No description available.'}</p>
+          <p className="text-gray-700 leading-relaxed text-md border-t pt-4">
+            {product.description || 'No description available.'}
+          </p>
 
-          <div className="flex gap-6 pt-6">
+          <div className="flex flex-wrap gap-6 pt-8">
             <button
               onClick={handleAddToCart}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
             >
               Add to Cart
             </button>
             <button
               onClick={handleBuyNow}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
             >
               Buy Now
             </button>
