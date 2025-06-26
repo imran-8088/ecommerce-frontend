@@ -95,11 +95,11 @@ const HomePage = () => {
 
                     <div className="mt-2">
                       <p className="text-green-600 font-semibold text-xl">
-                        ₹{hasDiscount ? discounted.toFixed(2) : originalPrice.toFixed(2)}
+                         $ {hasDiscount ? discounted.toFixed(2) : originalPrice.toFixed(2)}
                       </p>
                       {hasDiscount && (
                         <p className="text-sm text-gray-400 line-through">
-                          ₹{originalPrice.toFixed(2)}
+                          $ {originalPrice.toFixed(2)}
                         </p>
                       )}
                     </div>
