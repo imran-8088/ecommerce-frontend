@@ -80,6 +80,7 @@ npm start     # if you're using Create React App
 - On submission, places order and sends cart data to backend
 - ![CheckOut](./public/ProjectScreenshots/CheckOutpage.JPG)
 
+
 ### 🛠️ Admin Panel
 - Product list with pagination
 - Add/Edit/Delete product modals With Image Preview
