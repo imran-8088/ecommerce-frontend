@@ -11,18 +11,21 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_BASE_URL = `${BASE_URL}/products`;
 const CATEGORY_API_URL = `${BASE_URL}/categories`;
 
+const getInitialFormData = (product = {}) => ({
+  id: product.id || '',
+  name: product.name || '',
+  price: product.price || '',
+  discountedPrice: product.discountedPrice || '',
+  description: product.description || '',
+  categoryId: product.categoryId || '',
+  image: null,
+  imageUrl: product.image,
+});
+
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    price: '',
-    discountedPrice: '',
-    description: '',
-    categoryId: '',
-    image: null,
-  });
+  const [formData, setFormData] = useState(getInitialFormData());
   const [activeModal, setActiveModal] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -45,8 +48,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    Promise.all([fetchProducts(), fetchCategories()]);
   }, []);
 
   const handleChange = (e) => {
@@ -55,28 +57,12 @@ const AdminPage = () => {
   };
 
   const openAddModal = () => {
-    setFormData({
-      id: '',
-      name: '',
-      price: '',
-      discountedPrice: '',
-      description: '',
-      categoryId: '',
-      image: null,
-    });
+    setFormData(getInitialFormData());
     setActiveModal('add');
   };
 
   const openEditModal = (product) => {
-    setFormData({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      discountedPrice: product.discountedPrice,
-      description: product.description,
-      categoryId: product.categoryId,
-      image: null,
-    });
+    setFormData(getInitialFormData(product));
     setActiveModal('edit');
   };
 
@@ -90,6 +76,14 @@ const AdminPage = () => {
     setSelectedProduct(null);
   };
 
+  const validateForm = () => {
+    if (!formData.name || !formData.price || !formData.categoryId) {
+      toast.error('Please fill all required fields');
+      return false;
+    }
+    return true;
+  };
+
   const handleDeleteConfirmed = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/${id}`);
@@ -97,11 +91,13 @@ const AdminPage = () => {
       fetchProducts();
       closeModal();
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to delete product');
+      toast.error(err?.response?.data?.message || 'Failed to delete product');
     }
   };
 
   const handleAddProduct = async () => {
+    if (!validateForm()) return;
+
     const data = new FormData();
     Object.entries(formData).forEach(([key, val]) => {
       if (val && key !== 'id') data.append(key, val);
@@ -109,15 +105,17 @@ const AdminPage = () => {
 
     try {
       await axios.post(API_BASE_URL, data);
-      toast.success('Product added successfully');
+      toast.success(`Product "${formData.name}" added successfully`);
       fetchProducts();
       closeModal();
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to add product');
+      toast.error(err?.response?.data?.message || 'Failed to add product');
     }
   };
 
   const handleEditProduct = async () => {
+    if (!validateForm()) return;
+
     const data = new FormData();
     Object.entries(formData).forEach(([key, val]) => {
       if (val && key !== 'id') data.append(key, val);
@@ -125,24 +123,25 @@ const AdminPage = () => {
 
     try {
       await axios.put(`${API_BASE_URL}/${formData.id}`, data);
-      toast.success('Product updated successfully');
+      toast.success(`Product "${formData.name}" updated successfully`);
       fetchProducts();
       closeModal();
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to update product');
+      toast.error(err?.response?.data?.message || 'Failed to update product');
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-blue-100 py-16 px-4 text-center">
       <h1 className="text-4xl font-bold mb-10 text-gray-800 flex items-center justify-center gap-2">
-        <Settings className="text-blue-600" /> Admin Panel
+        <Settings className="text-blue-600" aria-label="Admin icon" /> Admin Panel
       </h1>
 
       <div className="mb-6 flex justify-end">
         <button
           onClick={openAddModal}
           className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 text-lg"
+          aria-label="Add Product"
         >
           <PlusCircle /> Add Product
         </button>

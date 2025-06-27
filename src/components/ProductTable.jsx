@@ -35,11 +35,9 @@ const ProductTable = ({ products, openEditModal, openDeleteModal }) => {
       const end = Math.min(totalPages - 1, currentPage + 1);
 
       pages.push(1);
-
       if (start > 2) pages.push('...');
       for (let i = start; i <= end; i++) pages.push(i);
       if (end < totalPages - 1) pages.push('...');
-
       pages.push(totalPages);
     }
 
@@ -47,10 +45,10 @@ const ProductTable = ({ products, openEditModal, openDeleteModal }) => {
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white rounded-xl shadow">
+    <div className="overflow-x-auto w-full">
+      <table className="min-w-full bg-white shadow-md rounded-xl overflow-hidden">
         <thead>
-          <tr className="bg-blue-600 text-white">
+          <tr className="bg-blue-600 text-white text-sm">
             <th className="py-3 px-4 text-left">Image</th>
             <th className="py-3 px-4 text-center">Name</th>
             <th className="py-3 px-4 text-center">Price</th>
@@ -60,31 +58,38 @@ const ProductTable = ({ products, openEditModal, openDeleteModal }) => {
           </tr>
         </thead>
         <tbody>
-          {paginatedProducts.map((product) => (
-            <tr key={product.id || product._id} className="border-t">
-              <td className="py-2 px-4">
+          {paginatedProducts.map((product, idx) => (
+            <tr
+              key={product.id || product._id}
+              className={`text-sm ${
+                idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+              } hover:bg-blue-50 transition`}
+            >
+              <td className="py-3 px-4">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="h-16 w-16 object-cover rounded"
+                  className="h-16 w-16 object-cover rounded shadow"
                 />
               </td>
-              <td className="py-2 px-4 text-center">{product.name}</td>
-              <td className="py-2 px-4 text-center">${product.price}</td>
-              <td className="py-2 px-4 text-center">${product.discountedPrice}</td>
-              <td className="py-2 px-4 text-center">
+              <td className="py-3 px-4 text-center font-medium">{product.name}</td>
+              <td className="py-3 px-4 text-center">${product.price}</td>
+              <td className="py-3 px-4 text-center">${product.discountedPrice}</td>
+              <td className="py-3 px-4 text-center text-gray-600">
                 {product.category?.name || 'N/A'}
               </td>
-              <td className="py-2 px-4 space-x-2 text-center">
+              <td className="py-3 px-4 text-center space-x-2">
                 <button
                   onClick={() => openEditModal(product)}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md shadow transition"
+                  aria-label="Edit product"
                 >
                   <Pencil size={16} />
                 </button>
                 <button
                   onClick={() => openDeleteModal(product)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow transition"
+                  aria-label="Delete product"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -95,11 +100,11 @@ const ProductTable = ({ products, openEditModal, openDeleteModal }) => {
       </table>
 
       {totalPages > 1 && (
-        <div className="mt-4 flex justify-center items-center gap-2">
+        <div className="mt-4 flex flex-wrap justify-center items-center gap-2 text-sm">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className={`px-3 py-1 rounded ${
+            className={`px-3 py-1 rounded-md transition ${
               currentPage === 1
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 : 'bg-blue-500 text-white hover:bg-blue-600'
@@ -117,9 +122,9 @@ const ProductTable = ({ products, openEditModal, openDeleteModal }) => {
               <button
                 key={`page-${page}`}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded ${
+                className={`px-3 py-1 rounded-md transition ${
                   page === currentPage
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-blue-600 text-white font-semibold'
                     : 'bg-gray-200 hover:bg-gray-300'
                 }`}
               >
@@ -131,7 +136,7 @@ const ProductTable = ({ products, openEditModal, openDeleteModal }) => {
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded ${
+            className={`px-3 py-1 rounded-md transition ${
               currentPage === totalPages
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 : 'bg-blue-500 text-white hover:bg-blue-600'

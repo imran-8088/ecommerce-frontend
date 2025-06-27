@@ -61,30 +61,30 @@ npm start     # if you're using Create React App
   - Name
   - Price and discounted price
   - "Add to Cart" button
-  - ![HomePage](./public/ProjectScreenshots/Homepage.JPG)
-  - ![HomePage](./public/ProjectScreenshots/Home.JPG)
+  - ![HomePage](./public/ProjectScreenshots/home.JPG)
+  - ![HomePage](./public/ProjectScreenshots/HomePage.JPG)
 
 ### 🔍 Product Detail Page
 - Detailed product view
 - Includes “Add to Cart” and “Buy Now” buttons
-- ![ProductDetailPage](./public/ProjectScreenshots/ProductDetailpage.JPG)
+- ![ProductDetailPage](./public/ProjectScreenshots/ProductdetailPage.JPG)
 
 ### 🛍️ Cart Page
 - Shows all added items
 - Quantity update and remove options
-- ![HomePage](./public/ProjectScreenshots/CartPage.JPG)
+- ![CartPage](./public/ProjectScreenshots/CartPage.JPG)
 
 
 ### 📦 Checkout Page
 - Basic customer detail form
 - On submission, places order and sends cart data to backend
-- ![HomePage](./public/ProjectScreenshots/checkOutpage.JPG)
+- ![CheckOut](./public/ProjectScreenshots/CheckOutpage.JPG)
 
 ### 🛠️ Admin Panel
 - Product list with pagination
-- Add/Edit/Delete product modals
+- Add/Edit/Delete product modals With Image Preview
 - Dynamic category dropdown
-- ![HomePage](./public/ProjectScreenshots/AdminPage.JPG)
+- ![AdminPage](./public/ProjectScreenshots/Adminpage.JPG)
 
 ---
 

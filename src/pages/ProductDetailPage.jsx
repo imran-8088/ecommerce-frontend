@@ -13,19 +13,19 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProduct = async () => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/${id}`);
-      setProduct(res.data);
-    } catch (err) {
-      const message = err.response?.data?.message || 'Error fetching product';
-      toast.error(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/products/${id}`);
+        setProduct(res.data);
+      } catch (err) {
+        const message = err.response?.data?.message || 'Error fetching product';
+        toast.error(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProduct();
   }, [id]);
 
@@ -51,19 +51,26 @@ const ProductDetailPage = () => {
     return (
       <>
         <Navbar />
-        <p className="text-center py-10 text-red-600">Product not found.</p>
+        <p className="text-center py-10 text-red-600 font-semibold text-lg">
+          Product not found.
+        </p>
       </>
     );
   }
 
+  const price = Number(product.price) || 0;
+  const discountedPrice = Number(product.discountedPrice) || null;
+  const isDiscounted = discountedPrice && discountedPrice < price;
+
   return (
     <>
-      <div className="max-w-7xl mx-auto p-6 md:p-10 flex flex-col md:flex-row gap-12 animate-fadeIn">
+      <section className="max-w-7xl mx-auto p-6 md:p-10 flex flex-col md:flex-row gap-12 animate-fadeIn">
         <div className="flex-1 flex justify-center">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full max-w-md h-auto rounded-2xl shadow-xl object-contain bg-white p-4"
+            onError={(e) => (e.target.src = '/fallback.png')}
+            className="w-full max-w-md h-auto rounded-2xl shadow-xl object-contain bg-white p-4 border"
           />
         </div>
 
@@ -75,12 +82,12 @@ const ProductDetailPage = () => {
             {product.category?.name || 'Uncategorized'}
           </p>
 
-          <div className="flex items-center space-x-4 text-xl font-medium">
-            {product.discountedPrice && (
-              <span className="text-gray-400 line-through">${product.price}</span>
+          <div className="flex items-center gap-4 text-xl font-medium">
+            {isDiscounted && (
+              <span className="text-gray-400 line-through">${price.toFixed(2)}</span>
             )}
             <span className="text-green-600 font-bold text-2xl">
-              $ {product.discountedPrice || product.price}
+              ${isDiscounted ? discountedPrice.toFixed(2) : price.toFixed(2)}
             </span>
           </div>
 
@@ -91,19 +98,19 @@ const ProductDetailPage = () => {
           <div className="flex flex-wrap gap-6 pt-8">
             <button
               onClick={handleAddToCart}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow-md transition duration-200 transform hover:scale-105"
             >
               Add to Cart
             </button>
             <button
               onClick={handleBuyNow}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full shadow-md transition duration-200 transform hover:scale-105"
             >
               Buy Now
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };
